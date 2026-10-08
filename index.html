@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#050814" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="description" content="NEXORA Business &amp; Tech Spin Wheel for Global Leadership Conference 4.0 — TAPMI Bengaluru IT Club." />
+  <title>NEXORA · Spin. Think. Solve. Lead. | GLC 4.0</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%050814'/%3E%3Ccircle cx='32' cy='32' r='18' fill='none' stroke='%234ee0c5' stroke-width='3'/%3E%3Cpath d='M32 14 L36 32 L32 50 L28 32 Z' fill='%23e0c48a'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+    <span class="grid-fade"></span>
+  </div>
+  <canvas id="fx-canvas" class="fx-canvas" aria-hidden="true"></canvas>
+
+  <a class="skip-link" href="#app">Skip to game</a>
+
+  <div class="app-shell" id="app">
+    <header class="topbar">
+      <div class="brand">
+        <p class="brand-kicker">IT Club · TAPMI Bengaluru</p>
+        <p class="brand-name">NEXORA</p>
+      </div>
+      <div class="topbar-meta">
+        <p class="event-chip">Global Leadership Conference 4.0</p>
+        <p class="session-chip" id="hud-line">Spin. Think. Solve. Lead.</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btn-mute" type="button" aria-pressed="false" aria-label="Mute sound">🔊</button>
+        <button class="icon-btn" id="btn-fullscreen" type="button" aria-label="Toggle fullscreen">⛶</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="screen is-active" id="screen-landing" data-screen="landing" aria-labelledby="landing-title">
+        <p class="eyebrow">NEXORA · Business &amp; Tech Stall</p>
+        <h1 id="landing-title" tabindex="-1">Spin. Think. Solve. Lead.</h1>
+        <p class="lede">An 8-section wheel built for GLC 4.0. You will not recite textbook definitions. You will read a factory, a warehouse, a team, a glitch — and think like an operator.</p>
+
+        <div class="pill-row" aria-hidden="true">
+          <span>HR</span><span>IT</span><span>Manufacturing</span><span>Management</span><span>Operations</span><span>Supply Chain</span>
+        </div>
+
+        <form class="entry-form" id="entry-form">
+          <label for="player-name">Your name <span class="optional">(for the board)</span></label>
+          <input id="player-name" name="player" maxlength="28" autocomplete="nickname" placeholder="e.g. Aisha" />
+          <button class="cta cta-primary" id="btn-start" type="submit">
+            Spin the NEXORA Wheel <span aria-hidden="true">→</span>
+          </button>
+        </form>
+        <p class="micro">4 spins · 5 / 10 / 15 points each · prizes at the stall. No login. About 3 minutes.</p>
+
+        <div class="how-grid">
+          <article><strong>01 Decode</strong><span>What am I looking at?</span></article>
+          <article><strong>02 Company</strong><span>Who am I?</span></article>
+          <article><strong>03 Draw</strong><span>Can you communicate it?</span></article>
+          <article><strong>04 Tool</strong><span>What does this org use?</span></article>
+          <article><strong>05 Glitch</strong><span>What’s going wrong?</span></article>
+          <article><strong>06 Logic</strong><span>Can you solve it?</span></article>
+          <article><strong>07 5 in 10</strong><span>How fast can you think?</span></article>
+          <article><strong>08 Bonus</strong><span>What would YOU do?</span></article>
+        </div>
+
+        <section class="board-card" aria-labelledby="board-title">
+          <h2 id="board-title">Stall leaderboard</h2>
+          <ol class="board-list" id="board-list"></ol>
+        </section>
+      </section>
+
+      <section class="screen" id="screen-wheel" data-screen="wheel" hidden aria-labelledby="wheel-title">
+        <div class="wheel-hud">
+          <p class="eyebrow" id="wheel-kicker">Round 1 of 4</p>
+          <h2 id="wheel-title" tabindex="-1">Tap the hub. Let the industry decide.</h2>
+          <p class="score-chip" id="score-chip">0 pts</p>
+        </div>
+
+        <div class="wheel-stage">
+          <div class="wheel-lamp" aria-hidden="true"></div>
+          <div class="pointer" aria-hidden="true">
+            <span class="pointer-nub"></span>
+            <span class="pointer-tip"></span>
+          </div>
+          <div class="wheel-frame">
+            <canvas id="wheel-canvas" width="640" height="640" aria-label="NEXORA spin wheel"></canvas>
+            <button class="hub" id="btn-spin" type="button">
+              <span class="hub-kicker">NEXORA</span>
+              <span class="hub-label" id="hub-label">SPIN</span>
+              <span class="hub-sub">GLC 4.0</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="micro wheel-hint" id="wheel-hint">One spin. One challenge. No textbook questions.</p>
+      </section>
+
+      <section class="screen" id="screen-challenge" data-screen="challenge" hidden aria-labelledby="challenge-title">
+        <div class="challenge-banner">
+          <p class="eyebrow" id="challenge-eyebrow">Section 01</p>
+          <h2 id="challenge-title" tabindex="-1">Decode the Industry</h2>
+          <p class="lede" id="challenge-tagline">What am I looking at?</p>
+          <div class="meta-row">
+            <span class="diff-pill" id="diff-pill">Easy · 5 pts</span>
+            <span class="domain-pill" id="domain-pill">All · Visual recognition</span>
+            <span class="timer-pill" id="timer-pill" hidden>00</span>
+          </div>
+        </div>
+        <div class="challenge-body" id="challenge-body"></div>
+        <p class="status-line" id="challenge-status" aria-live="polite"></p>
+      </section>
+
+      <section class="screen" id="screen-round" data-screen="round" hidden aria-labelledby="round-title">
+        <p class="eyebrow" id="round-eyebrow">Round complete</p>
+        <h2 id="round-title" tabindex="-1">+10</h2>
+        <p class="lede" id="round-copy"></p>
+        <p class="score-chip large" id="round-total">Total 10 pts</p>
+        <button class="cta cta-primary" id="btn-next-round" type="button">Back to the wheel</button>
+      </section>
+
+      <section class="screen" id="screen-result" data-screen="result" hidden aria-labelledby="result-title">
+        <p class="eyebrow">GLC 4.0 · NEXORA</p>
+        <p class="tier-kicker" id="tier-kicker">BUSINESS STRATEGIST</p>
+        <h2 id="result-title" tabindex="-1">You led like an operator.</h2>
+        <p class="lede" id="result-copy"></p>
+        <p class="final-score" id="final-score">0</p>
+        <p class="prize-line" id="prize-line"></p>
+        <ul class="round-log" id="round-log"></ul>
+        <div class="cta-row">
+          <button class="cta cta-primary" id="btn-share" type="button">Share this run</button>
+          <button class="cta cta-reset" id="btn-next-player" type="button">Next participant →</button>
+        </div>
+        <p class="share-feedback" id="share-feedback" aria-live="polite"></p>
+        <div class="nexora-invite">
+          <p>That was NEXORA at Global Leadership Conference 4.0.</p>
+          <p class="invite-lead">Build. Experiment. Lead what happens next.</p>
+          <p class="brand-footer">NEXORA — IT Club, TAPMI Bengaluru</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="legal">
+      <p>Interactive stall experience for GLC 4.0. Scores stay on this device for the on-site leaderboard only.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
